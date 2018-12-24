@@ -5,7 +5,8 @@
   "main": "src/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/parcel-bundler/bin/cli.js build src/index.html -d dist"
+    "build": "./node_modules/parcel-bundler/bin/cli.js build src/index.html -d dist",
+    "start": "./node_modules/http-server/bin/http-server dist"
   },
   "keywords": [
     "THREE",
@@ -16,8 +17,11 @@
   "license": "MIT",
   "dependencies": {
     "@types/three": "^0.93.13",
-    "parcel-bundler": "^1.11.0",
     "three": "^0.99.0",
     "typescript": "^3.2.2"
+  },
+  "devDependencies": {
+    "http-server": "^0.11.1",
+    "parcel-bundler": "^1.11.0"
   }
 }
