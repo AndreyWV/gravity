@@ -1,0 +1,21 @@
+{
+  "name": "gravity",
+  "version": "0.0.0",
+  "description": "Gravity emulation with THREE.js",
+  "main": "src/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/parcel-bundler/bin/cli.js build src/index.html -d dist"
+  },
+  "keywords": [
+    "THREE",
+    "graviry",
+    "physics"
+  ],
+  "author": "andrey.w.v@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "parcel-bundler": "^1.11.0",
+    "typescript": "^3.2.2"
+  }
+}
