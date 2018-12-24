@@ -15,7 +15,9 @@
   "author": "andrey.w.v@gmail.com",
   "license": "MIT",
   "dependencies": {
+    "@types/three": "^0.93.13",
     "parcel-bundler": "^1.11.0",
+    "three": "^0.99.0",
     "typescript": "^3.2.2"
   }
 }
