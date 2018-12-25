@@ -3,23 +3,34 @@ import { scene, renderer, camera } from './3d';
 import { Sphere } from './physical/sphere.class';
 import { drawCoordinateSystem } from './helpers';
 
-const sphere1 = new Sphere(3, {X: 0.05, Y: 0, Z: 0});
-
-var geometry = new THREE.SphereGeometry(sphere1.radius, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
-var material = new THREE.MeshNormalMaterial();
-var sphere1Mesh = new THREE.Mesh( geometry, material );
-sphere1Mesh.position.set(0, 0, 0);
-
-scene.add( sphere1Mesh );
 drawCoordinateSystem(scene);
+
+const staticSphere = new Sphere(1, {X: 0, Y: 0, Z: 0});
+const staticSphereMesh = createSphere(staticSphere);
+const movedSphere = new Sphere(1, {X: 0.03, Y: 0.005, Z: 0});
+const movedSphereMesh = createSphere(movedSphere);
+staticSphereMesh.position.set(50, 0, 0);
+movedSphereMesh.position.set(0, 0, 0);
+scene.add( staticSphereMesh, movedSphereMesh );
 
 var render = function () {
   requestAnimationFrame(render);
 
-  const position = sphere1Mesh.position;
-  sphere1Mesh.position.set(position.x + sphere1.V.X, position.y + sphere1.V.Y, position.z + sphere1.V.Z);
+  const position = movedSphereMesh.position;
+  movedSphereMesh.position.set(
+    position.x + movedSphere.V.X,
+    position.y + movedSphere.V.Y, 
+    position.z + movedSphere.V.Z
+  );
   
   renderer.render(scene, camera);
 };
 
 render();
+
+function createSphere(sphere: Sphere): THREE.Mesh {
+  const geometry = new THREE.SphereGeometry(sphere.radius, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+  const material = new THREE.MeshNormalMaterial();
+  const mesh = new THREE.Mesh( geometry, material );
+  return mesh;
+}
