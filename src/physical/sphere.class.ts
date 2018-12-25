@@ -3,7 +3,7 @@ import { PhysicalBody, Speed } from './body.class';
 const DENSITY = 1;
 
 export class Sphere extends PhysicalBody {
-  constructor(mass: number, speed: Speed = {Vx: 0, Vy: 0, Vz: 0}) {
+  constructor(mass: number, speed: Speed = {X: 0, Y: 0, Z: 0}) {
     super(mass, speed)
   }
 

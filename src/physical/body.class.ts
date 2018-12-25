@@ -1,26 +1,33 @@
 export interface Speed {
-  Vx: number;
-  Vy: number;
-  Vz: number;
+  X: number;
+  Y: number;
+  Z: number;
 }
 
 export interface Force {
-  Fx: number;
-  Fy: number;
-  Fz: number;
+  X: number;
+  Y: number;
+  Z: number;
 }
 
 export class PhysicalBody {
   public mass: number;
   public V: Speed;
-  public F: Force;
 
-  constructor(mass: number, speed: Speed = {Vx: 0, Vy: 0, Vz: 0}) {
+  constructor(mass: number, speed: Speed = {X: 0, Y: 0, Z: 0}) {
     if (mass <= 0) {
       console.error('Mass can not be less than or equal to zero');
       return undefined;
     }
     this.mass = mass;
     this.V = speed;
+  }
+
+  public get F(): Force {
+    return {
+      X: this.mass * this.V.X,
+      Y: this.mass * this.V.Y,
+      Z: this.mass * this.V.Z,
+    };
   }
 }
