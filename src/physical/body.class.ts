@@ -1,10 +1,20 @@
+import { round } from "../helpers";
+
 export interface RectSystemValue {
   X: number;
   Y: number;
   Z: number;
 }
 
+const G = 1;
+
 export class PhysicalBody {
+
+  public static calculateGravitation(body1: PhysicalBody, body2: PhysicalBody, distance: number): number {
+    const gravity =  G * body1.mass * body2.mass / Math.pow(distance, 2);
+    return round(gravity * 1000) / 1000;
+  }
+
   public mass: number;
   public V: RectSystemValue;
 

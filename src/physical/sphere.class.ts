@@ -1,11 +1,12 @@
 import { PhysicalBody, RectSystemValue } from './body.class';
+import { round } from '../helpers';
 
 const DENSITY = 1;
 
 export class Sphere extends PhysicalBody {
 
   public get radius(): number {
-    return Math.round(this.getCalculatedRadius() * 1000) / 1000;
+    return round(this.getCalculatedRadius() * 1000) / 1000;
   }
 
   constructor(mass: number, speed: RectSystemValue = {X: 0, Y: 0, Z: 0}) {

@@ -1,7 +1,16 @@
 import * as THREE from 'three';
 import { Sphere, RectSystemValue } from '../physical';
+import { round } from '../helpers';
 
 export class Sphere3d extends Sphere {
+
+  public static calculateDistance(sphere1: Sphere3d, sphere2: Sphere3d): RectSystemValue {
+    return {
+      X: round(Math.pow(sphere1.mesh.position.x + sphere2.mesh.position.x, 2)),
+      Y: round(Math.pow(sphere1.mesh.position.y + sphere2.mesh.position.y, 2)),
+      Z: round(Math.pow(sphere1.mesh.position.z + sphere2.mesh.position.z, 2)),
+    }
+  }
 
   public mesh: THREE.Mesh;
 
@@ -17,5 +26,11 @@ export class Sphere3d extends Sphere {
       coords.Y || 0,
       coords.Z || 0,
     );
+  }
+
+  public calculateMutualForce(affectingBody: Sphere3d): number {
+    const distance: RectSystemValue = Sphere3d.calculateDistance(this, affectingBody);
+
+    return 0;
   }
 }
