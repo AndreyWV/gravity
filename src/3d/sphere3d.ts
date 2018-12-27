@@ -28,9 +28,8 @@ export class Sphere3d extends Sphere {
     );
   }
 
-  public calculateMutualForce(affectingBody: Sphere3d): number {
+  public calculateMutualForce(affectingBody: Sphere3d): RectSystemValue {
     const distance: RectSystemValue = Sphere3d.calculateDistance(this, affectingBody);
-
-    return 0;
+    return Sphere3d.calculateGravitation(this, affectingBody, distance);
   }
 }

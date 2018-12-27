@@ -9,9 +9,16 @@ export interface RectSystemValue {
 
 export class PhysicalBody {
 
-  public static calculateGravitation(body1: PhysicalBody, body2: PhysicalBody, distance: number): number {
-    const gravity =  G * body1.mass * body2.mass / Math.pow(distance, 2);
-    return round(gravity);
+  public static calculateGravitation(
+    body1: PhysicalBody,
+    body2: PhysicalBody,
+    distance: RectSystemValue
+  ): RectSystemValue {
+    return {
+      X: round(G * body1.mass * body2.mass / Math.pow(distance.X, 2)),
+      Y: round(G * body1.mass * body2.mass / Math.pow(distance.Y, 2)),
+      Z: round(G * body1.mass * body2.mass / Math.pow(distance.Z, 2)),
+    }
   }
 
   public mass: number;
