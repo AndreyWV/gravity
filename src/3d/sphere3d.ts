@@ -1,14 +1,13 @@
 import * as THREE from 'three';
 import { Sphere, RectSystemValue } from '../physical';
-import { round } from '../helpers';
 
 export class Sphere3d extends Sphere {
 
-  public static calculateDistance(sphere1: Sphere3d, sphere2: Sphere3d): RectSystemValue {
+  public static calculateDistance(body1: Sphere3d, body2: Sphere3d): RectSystemValue {
     return {
-      X: round(Math.pow(sphere1.mesh.position.x + sphere2.mesh.position.x, 2)),
-      Y: round(Math.pow(sphere1.mesh.position.y + sphere2.mesh.position.y, 2)),
-      Z: round(Math.pow(sphere1.mesh.position.z + sphere2.mesh.position.z, 2)),
+      X: Math.abs(body1.mesh.position.x - body2.mesh.position.x),
+      Y: Math.abs(body1.mesh.position.y - body2.mesh.position.y),
+      Z: Math.abs(body1.mesh.position.z - body2.mesh.position.z),
     }
   }
 
@@ -29,7 +28,28 @@ export class Sphere3d extends Sphere {
   }
 
   public calculateMutualForce(affectingBody: Sphere3d): RectSystemValue {
+    if (affectingBody === this) {
+      return {X: 0, Y: 0, Z: 0};
+    }
     const distance: RectSystemValue = Sphere3d.calculateDistance(this, affectingBody);
     return Sphere3d.calculateGravitation(this, affectingBody, distance);
+  }
+
+  public calculateSpeedDelta(affectingBody: Sphere3d): RectSystemValue {
+    if (affectingBody === this) {
+      return {X: 0, Y: 0, Z: 0};
+    }
+    const force = this.calculateMutualForce(affectingBody);
+    return {
+      X: this.correctSpeedDirection(force.X * this.mass, affectingBody, 'X'),
+      Y: this.correctSpeedDirection(force.Y * this.mass, affectingBody, 'Y'),
+      Z: this.correctSpeedDirection(force.Z * this.mass, affectingBody, 'Z'),
+    }
+  }
+
+  private correctSpeedDirection(speed: number, affectingBody: Sphere3d, coord: 'X' | 'Y' | 'Z'): number {
+    return (affectingBody.mesh.position[coord] > this.mesh.position[coord]) ?
+      speed:
+      -speed;
   }
 }
