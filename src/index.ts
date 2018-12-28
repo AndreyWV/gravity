@@ -6,7 +6,7 @@ drawCoordinateSystem(scene);
 
 const sceneItems: Sphere3d[] = [
   new Sphere3d(1, {X: 0, Y: 0, Z: 0}, {X: 50, Y: 0, Z: 0}),
-  new Sphere3d(1, {X: 0.03, Y: 0.005, Z: 0}, {X: 0, Y: 0, Z: 0}),
+  new Sphere3d(0.1, {X: 0.03, Y: 0.005, Z: 0}, {X: 0, Y: 0, Z: 0}),
 ]
 
 sceneItems.forEach(item => scene.add(item.mesh));
@@ -28,8 +28,7 @@ var render = function () {
 render();
 
 setInterval(() => {
-  const distance = Sphere3d.calculateDistance(sceneItems[0], sceneItems[1]);
-  sceneItems[0].calculateSpeedDelta(sceneItems[1]);
-  // console.log(Sphere3d.calculateGravitation(sceneItems[0], sceneItems[1], distance));
-  // console.log(sceneItems[1].calculateSpeedDelta(sceneItems[0]));
+  const speedDelta = sceneItems[1].calculateSpeedDelta(sceneItems[0]);
+  const speedDelta2 = sceneItems[0].calculateSpeedDelta(sceneItems[1]);
+  console.log(speedDelta.X, speedDelta2.X);
 }, 1000);

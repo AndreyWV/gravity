@@ -39,15 +39,15 @@ export class Sphere3d extends Sphere {
     if (affectingBody === this) {
       return {X: 0, Y: 0, Z: 0};
     }
-    const force = this.calculateMutualForce(affectingBody);
+    const force: RectSystemValue = this.calculateMutualForce(affectingBody);
     return {
-      X: this.correctSpeedDirection(force.X * this.mass, affectingBody, 'X'),
-      Y: this.correctSpeedDirection(force.Y * this.mass, affectingBody, 'Y'),
-      Z: this.correctSpeedDirection(force.Z * this.mass, affectingBody, 'Z'),
+      X: this.correctSpeedDirection(force.X * this.mass, affectingBody, 'x'),
+      Y: this.correctSpeedDirection(force.Y * this.mass, affectingBody, 'y'),
+      Z: this.correctSpeedDirection(force.Z * this.mass, affectingBody, 'z'),
     }
   }
 
-  private correctSpeedDirection(speed: number, affectingBody: Sphere3d, coord: 'X' | 'Y' | 'Z'): number {
+  private correctSpeedDirection(speed: number, affectingBody: Sphere3d, coord: 'x' | 'y' | 'z'): number {
     return (affectingBody.mesh.position[coord] > this.mesh.position[coord]) ?
       speed:
       -speed;
