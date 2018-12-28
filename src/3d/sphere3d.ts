@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Sphere, RectSystemValue } from '../physical';
+import { round } from '../helpers';
 
 export class Sphere3d extends Sphere {
 
@@ -9,6 +10,21 @@ export class Sphere3d extends Sphere {
       Y: Math.abs(body1.mesh.position.y - body2.mesh.position.y),
       Z: Math.abs(body1.mesh.position.z - body2.mesh.position.z),
     }
+  }
+
+  public static calculateAbsoluteDistance(body1: Sphere3d, body2: Sphere3d): number {
+    const distance = Sphere3d.calculateDistance(body1, body2);
+    return round(
+      Math.sqrt(Math.pow(distance.X, 2) + Math.pow(distance.Y, 2) + Math.pow(distance.Z, 2))
+    );
+  }
+
+  public static isCollision(body1: Sphere3d, body2: Sphere3d): boolean {
+    if (body1 === body2) {
+      return false;
+    }
+    const distance = Sphere3d.calculateAbsoluteDistance(body1, body2);
+    return (distance < body1.radius + body2.radius);
   }
 
   public mesh: THREE.Mesh;

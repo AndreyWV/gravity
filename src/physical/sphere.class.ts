@@ -13,10 +13,6 @@ export class Sphere extends PhysicalBody {
     return this;
   }
 
-  public calculateMutualForce(body: Sphere) {
-    
-  }
-
   private getVolume(): number {
     return this.mass / DENSITY;
   }
