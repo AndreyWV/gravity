@@ -2,5 +2,5 @@
 export const PRECISION = 1000;
 
 // Physics
-export const DENSITY = 1;
-export const G = 1;
+export const DENSITY = 0.01;
+export const G = 25;

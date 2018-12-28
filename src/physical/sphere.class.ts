@@ -18,7 +18,7 @@ export class Sphere extends PhysicalBody {
   }
 
   private getVolume(): number {
-    return DENSITY / this.mass;
+    return this.mass / DENSITY;
   }
 
   private getCalculatedRadius() {
