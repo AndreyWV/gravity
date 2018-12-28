@@ -7,7 +7,7 @@ drawCoordinateSystem(scene);
 
 const sceneItems: Sphere3d[] = [
   new Sphere3d(5, {X: 0, Y: 0, Z: 0}, {X: 50, Y: 0, Z: 0}),
-  new Sphere3d(0.1, {X: 0.02, Y: 0, Z: 0}, {X: 0, Y: 0, Z: 0}),
+  new Sphere3d(0.1, {X: 0.05, Y: 0, Z: 0}, {X: 0, Y: 0, Z: 0}),
 ]
 
 // for (var i = 0; i < 50; i++) {
@@ -63,11 +63,52 @@ function getRandom() {
   return Math.round(Math.random() * 1000);
 }
 setInterval(() => {
+  const collisions: Sphere3d[][] = [];
   sceneItems.forEach(item => {
     sceneItems.forEach(otherItem => {
       if (Sphere3d.isCollision(item, otherItem)) {
         console.log(1);
+        if (!isItemInCollision(collisions, item)) {
+          collisions.push([item, otherItem]);
+        }
       }
     });
   });
-}, 1000);
+  processCollisions(collisions);
+
+}, 100);
+
+function isItemInCollision(collisions: Sphere3d[][], item: Sphere3d): boolean {
+  const finded = collisions.find(collisionItem => collisionItem[1] === item);
+  console.log(finded);
+  return Boolean(finded);
+}
+
+function processCollisions(collisions: Sphere3d[][]): void {
+  if (!collisions.length) {
+    return;
+  }
+  collisions.forEach(collision => { processCollision(collision[0], collision[1]); })
+}
+
+function processCollision(item1: Sphere3d, item2: Sphere3d): void {
+  scene.remove(item1.mesh);
+  scene.remove(item2.mesh);
+
+  const newItem = new Sphere3d(
+    item1.mass + item2.mass,
+    {
+      X: item1.V.X + item2.V.X,
+      Y: item1.V.Y + item2.V.Y,
+      Z: item1.V.Z + item2.V.Z,
+    },
+    {
+      X: Math.abs(item1.mesh.position.x - item2.mesh.position.x),
+      Y: Math.abs(item1.mesh.position.y - item2.mesh.position.y),
+      Z: Math.abs(item1.mesh.position.z - item2.mesh.position.z),
+    }
+  );
+
+  sceneItems.push(newItem);
+  scene.add(newItem.mesh);
+}
