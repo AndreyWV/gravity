@@ -24,7 +24,7 @@ export class Sphere3d extends Sphere {
       return false;
     }
     const distance = Sphere3d.calculateAbsoluteDistance(body1, body2);
-    return (distance < body1.radius + body2.radius);
+    return (distance / 1.5 < body1.radius + body2.radius);
   }
 
   public mesh: THREE.Mesh;

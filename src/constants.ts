@@ -1,5 +1,5 @@
 // Math
-export const PRECISION = 1000;
+export const PRECISION = 100000;
 
 // Physics
 export const DENSITY = 0.01;
