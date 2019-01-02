@@ -1,6 +1,6 @@
 // Math
-export const PRECISION = 100000;
+export const PRECISION = 10000;
 
 // Physics
 export const DENSITY = 0.01;
-export const G = 1;
+export const G = 0.5;

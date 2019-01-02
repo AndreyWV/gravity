@@ -10,7 +10,7 @@ const sceneItems: Sphere3d[] = [
   // new Sphere3d(0.1, {X: 0.05, Y: 0, Z: 0}, {X: 0, Y: 0, Z: 0}),
 ]
 
-for (var i = 0; i < 200; i++) {
+for (var i = 0; i < 20; i++) {
   sceneItems.push(new Sphere3d(1, undefined, {X: getRandom(), Y: getRandom(), Z: getRandom()}))
 }
 
@@ -77,7 +77,8 @@ var render = function () {
 render();
 
 function getRandom() {
-  return Math.round(Math.random() * 1000);
+  const value = Math.round(Math.random() * 200);
+  return value % 2 === 0 ? value : -value;
 }
 
 function processCollisions(collisions: Sphere3d[][]): void {
@@ -99,10 +100,18 @@ function processCollision(collision: Sphere3d[]): void {
       Z: round(((resultSpeed.Z * resultMass) + (item.V.Z * item.mass)) / (resultMass + item.mass)),
     };
 
-    resultPosition = {
-      X: Math.abs((resultPosition.X + item.mesh.position.x) / (resultPosition.X ? 2 : 1)),
-      Y: Math.abs((resultPosition.Y + item.mesh.position.y) / (resultPosition.Y ? 2 : 1)),
-      Z: Math.abs((resultPosition.Z + item.mesh.position.z) / (resultPosition.Z ? 2 : 1)),
+    if (resultMass < item.mass) {
+      resultPosition = {
+        X: item.mesh.position.x,
+        Y: item.mesh.position.y,
+        Z: item.mesh.position.z,
+      };
+    } else if (resultMass === item.mass) {
+      resultPosition = {
+        X: (resultPosition.X + item.mesh.position.x) / (resultPosition.X ? 2 : 1),
+        Y: (resultPosition.Y + item.mesh.position.y) / (resultPosition.Y ? 2 : 1),
+        Z: (resultPosition.Z + item.mesh.position.z) / (resultPosition.Z ? 2 : 1),
+      }
     }
 
     resultMass += item.mass;
