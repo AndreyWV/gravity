@@ -3,7 +3,8 @@ import { scene } from './scene';
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 const camera = new THREE.PerspectiveCamera(1, window.innerWidth / window.innerHeight, 0.1, 1000000 );
-camera.position.set(100000, 100000, 100000);
+// camera.position.set(100000, 100000, 100000);
+camera.position.set(0, 0, 10000);
 camera.lookAt(scene.position);
 
 const controls = new OrbitControls(camera);

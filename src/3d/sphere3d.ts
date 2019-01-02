@@ -24,7 +24,10 @@ export class Sphere3d extends Sphere {
       return false;
     }
     const distance = Sphere3d.calculateAbsoluteDistance(body1, body2);
-    return (distance / 1.5 < body1.radius + body2.radius);
+    // CORRECTIONAL_COEFFICIENT defines Error correction when calculate collision
+    // Error occurs because of high speed of particles
+    const CORRECTIONAL_COEFFICIENT = 1.5;
+    return (distance / CORRECTIONAL_COEFFICIENT < body1.radius + body2.radius);
   }
 
   public mesh: THREE.Mesh;

@@ -46,17 +46,29 @@ var render = function () {
     );
   });
 
-  const collisions: Sphere3d[][] = [];
+  let collisions: Sphere3d[][] = [];
   sceneItems.forEach(item => {
     sceneItems.forEach(otherItem => {
       if (Sphere3d.isCollision(item, otherItem)) {
-        // console.log(1);
-        if (!isItemInCollision(collisions, item)) {
+        const collisionOfItem = collisions.find(collision => {
+          return collision.includes(item) || collision.includes(otherItem);
+        });
+        if (collisionOfItem) {
+          collisionOfItem.push(item);
+          collisionOfItem.push(otherItem);
+        } else {
           collisions.push([item, otherItem]);
         }
       }
     });
   });
+
+  collisions = collisions.map(item => {
+    return item.filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    });
+  });
+
   processCollisions(collisions);
   
   renderer.render(scene, camera);
@@ -68,58 +80,39 @@ function getRandom() {
   return Math.round(Math.random() * 1000);
 }
 
-// setInterval(() => {
-//   const collisions: Sphere3d[][] = [];
-//   sceneItems.forEach(item => {
-//     sceneItems.forEach(otherItem => {
-//       if (Sphere3d.isCollision(item, otherItem)) {
-//         console.log(1);
-//         if (!isItemInCollision(collisions, item)) {
-//           collisions.push([item, otherItem]);
-//         }
-//       }
-//     });
-//   });
-//   processCollisions(collisions);
-
-// }, 100);
-
-function isItemInCollision(collisions: Sphere3d[][], item: Sphere3d): boolean {
-  const finded = collisions.find(collisionItem => collisionItem[1] === item);
-  // console.log(finded);
-  return Boolean(finded);
-}
-
 function processCollisions(collisions: Sphere3d[][]): void {
   if (!collisions.length) {
     return;
   }
-  collisions.forEach(collision => { processCollision(collision[0], collision[1]); })
+  collisions.forEach(collision => { processCollision(collision); })
 }
 
-function processCollision(item1: Sphere3d, item2: Sphere3d): void {
-  scene.remove(item1.mesh);
-  scene.remove(item2.mesh);
+function processCollision(collision: Sphere3d[]): void {
+  let resultMass: number = 0;
+  let resultSpeed: RectSystemValue = {X: 0, Y: 0, Z: 0};
+  let resultPosition: RectSystemValue = {X: 0, Y: 0, Z: 0};
 
-  const newItem = new Sphere3d(
-    item1.mass + item2.mass,
-    {
-      X: round(((item1.V.X * item1.mass) + (item2.V.X * item2.mass)) / (item1.mass + item2.mass)),
-      Y: round(((item1.V.Y * item1.mass) + (item2.V.Y * item2.mass)) / (item1.mass + item2.mass)),
-      Z: round(((item1.V.Z * item1.mass) + (item2.V.Z * item2.mass)) / (item1.mass + item2.mass)),
-    },
-    {
-      X: Math.abs((item1.mesh.position.x + item2.mesh.position.x) / 2),
-      Y: Math.abs((item1.mesh.position.y + item2.mesh.position.y) / 2),
-      Z: Math.abs((item1.mesh.position.z + item2.mesh.position.z) / 2),
+  collision.forEach(item => {
+    resultSpeed = {
+      X: round(((resultSpeed.X * resultMass) + (item.V.X * item.mass)) / (resultMass + item.mass)),
+      Y: round(((resultSpeed.Y * resultMass) + (item.V.Y * item.mass)) / (resultMass + item.mass)),
+      Z: round(((resultSpeed.Z * resultMass) + (item.V.Z * item.mass)) / (resultMass + item.mass)),
+    };
+
+    resultPosition = {
+      X: Math.abs((resultPosition.X + item.mesh.position.x) / (resultPosition.X ? 2 : 1)),
+      Y: Math.abs((resultPosition.Y + item.mesh.position.y) / (resultPosition.Y ? 2 : 1)),
+      Z: Math.abs((resultPosition.Z + item.mesh.position.z) / (resultPosition.Z ? 2 : 1)),
     }
-  );
 
-  let index = sceneItems.indexOf(item1);
-  sceneItems.splice(index, 1);
-  index = sceneItems.indexOf(item2);
-  sceneItems.splice(index, 1);
+    resultMass += item.mass;
 
-  sceneItems.push(newItem);
+    scene.remove(item.mesh);
+    let index = sceneItems.indexOf(item);
+    sceneItems.splice(index, 1);
+  });
+
+  const newItem = new Sphere3d(resultMass, resultSpeed, resultPosition);
   scene.add(newItem.mesh);
+  sceneItems.push(newItem);
 }
