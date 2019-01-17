@@ -6,6 +6,11 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-renderer.render( scene, camera );
+const cssRenderer = new THREE.CSS3DRenderer();
+cssRenderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(cssRenderer.domElement);
 
-export { renderer };
+renderer.render( scene, camera );
+cssRenderer.render( scene, camera );
+
+export { renderer, cssRenderer };

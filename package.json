@@ -16,8 +16,8 @@
   "author": "andrey.w.v@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@types/three": "^0.93.13",
-    "three": "^0.99.0",
+    "@types/three": "^0.93.15",
+    "three": "^0.100.0",
     "three-orbit-controls": "^82.1.0",
     "typescript": "^3.2.2"
   },

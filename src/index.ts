@@ -1,3 +1,5 @@
+import { initExtensions } from './extensions';
+initExtensions();
 import { scene, renderer, camera } from './3d';
 import { drawCoordinateSystem, round } from './helpers';
 import { Sphere3d } from './3d/sphere3d';
