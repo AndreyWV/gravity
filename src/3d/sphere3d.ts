@@ -31,19 +31,12 @@ export class Sphere3d extends Sphere {
   }
 
   public mesh: THREE.Mesh;
+  public cssObject: THREE.CSS3DObject;
 
   constructor(mass: number, speed?: RectSystemValue, coords?: RectSystemValue) {
     super(mass, speed);
-
-    const sphere = this;
-    const geometry = new THREE.SphereGeometry(sphere.radius, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
-    const material = new THREE.MeshNormalMaterial();
-    this.mesh = new THREE.Mesh( geometry, material );
-    this.mesh.position.set(
-      coords.X || 0,
-      coords.Y || 0,
-      coords.Z || 0,
-    );
+    this.createMesh(coords);
+    this.createCssObject(coords);
   }
 
   public calculateMutualForce(affectingBody: Sphere3d): RectSystemValue {
@@ -70,5 +63,32 @@ export class Sphere3d extends Sphere {
     return (affectingBody.mesh.position[coord] > this.mesh.position[coord]) ?
       speed:
       -speed;
+  }
+
+  private createMesh(coords: RectSystemValue): void {
+    const geometry = new THREE.SphereGeometry(this.radius, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+    const material = new THREE.MeshNormalMaterial();
+    this.mesh = new THREE.Mesh( geometry, material );
+    this.mesh.position.set(
+      coords.X || 0,
+      coords.Y || 0,
+      coords.Z || 0,
+    );
+  }
+
+  private createCssObject(coords: RectSystemValue): void {
+    const element = document.createElement('div');
+    element.style.width = `${this.radius * 2}px`;
+    element.style.height = `${this.radius * 2}px`;
+    element.style.backgroundColor = '#ffffff';
+    element.style.borderRadius = '50%';
+    const object = new THREE.CSS3DObject(element);
+    object.position.set(
+      coords.X || 0,
+      coords.Y || 0,
+      coords.Z || 0,
+    );
+
+    this.cssObject = object;
   }
 }

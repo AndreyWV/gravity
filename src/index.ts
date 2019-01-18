@@ -1,6 +1,7 @@
+import * as THREE from 'three';
 import { initExtensions } from './extensions';
 initExtensions();
-import { scene, renderer, camera } from './3d';
+import { scene, renderer, camera, cssRenderer, cssScene } from './3d';
 import { drawCoordinateSystem, round } from './helpers';
 import { Sphere3d } from './3d/sphere3d';
 import { RectSystemValue } from './physical';
@@ -16,7 +17,13 @@ for (var i = 0; i < 20; i++) {
   sceneItems.push(new Sphere3d(1, undefined, {X: getRandom(), Y: getRandom(), Z: getRandom()}))
 }
 
-sceneItems.forEach(item => scene.add(item.mesh));
+sceneItems.forEach(item => {
+  scene.add(item.mesh);
+  cssScene.add(item.cssObject);
+});
+
+
+// cssScene.add(object);
 
 var render = function () {
   requestAnimationFrame(render);
@@ -46,6 +53,12 @@ var render = function () {
       item.mesh.position.y + item.V.Y,
       item.mesh.position.z + item.V.Z,
     );
+
+    item.cssObject.position.set(
+      item.cssObject.position.x + item.V.X,
+      item.cssObject.position.y + item.V.Y,
+      item.cssObject.position.z + item.V.Z,
+    )
   });
 
   let collisions: Sphere3d[][] = [];
@@ -74,6 +87,7 @@ var render = function () {
   processCollisions(collisions);
   
   renderer.render(scene, camera);
+  cssRenderer.render(cssScene, camera);
 };
 
 render();
@@ -119,11 +133,13 @@ function processCollision(collision: Sphere3d[]): void {
     resultMass += item.mass;
 
     scene.remove(item.mesh);
+    cssScene.remove(item.cssObject);
     let index = sceneItems.indexOf(item);
     sceneItems.splice(index, 1);
   });
 
   const newItem = new Sphere3d(resultMass, resultSpeed, resultPosition);
   scene.add(newItem.mesh);
+  cssScene.add(newItem.cssObject);
   sceneItems.push(newItem);
 }
