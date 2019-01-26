@@ -1,25 +1,24 @@
-import * as THREE from 'three';
 import { initExtensions } from './extensions';
 initExtensions();
-import { scene, renderer, camera, cssRenderer, cssScene } from './3d';
+import { scene, renderer, camera/* , cssRenderer, cssScene */ } from './3d';
 import { drawCoordinateSystem, round } from './helpers';
 import { Sphere3d } from './3d/sphere3d';
 import { RectSystemValue } from './physical';
 
-drawCoordinateSystem(scene);
+// drawCoordinateSystem(scene);
 
 const sceneItems: Sphere3d[] = [
-  new Sphere3d(5, {X: 0, Y: 0, Z: 0}, {X: 0, Y: 0, Z: 0}),
+  // new Sphere3d(5, {X: 0, Y: 0, Z: 0}, {X: 0, Y: 0, Z: 0}),
   // new Sphere3d(0.1, {X: 0.05, Y: 0, Z: 0}, {X: 0, Y: 0, Z: 0}),
 ]
 
-// for (var i = 0; i < 20; i++) {
-//   sceneItems.push(new Sphere3d(1, undefined, {X: getRandom(), Y: getRandom(), Z: getRandom()}))
-// }
+for (var i = 0; i < 100; i++) {
+  sceneItems.push(new Sphere3d(1, undefined, {X: getRandom(), Y: getRandom(), Z: getRandom()}))
+}
 
 sceneItems.forEach(item => {
   scene.add(item.mesh);
-  cssScene.add(item.cssObject);
+  // cssScene.add(item.cssObject);
 });
 
 var render = function () {
@@ -56,15 +55,6 @@ var render = function () {
       item.cssObject.position.y + item.V.Y,
       item.cssObject.position.z + item.V.Z,
     )
-
-    window.camera = camera;
-    window.item = item;
-    window.THREE = THREE;
-
-    const cameraVector = camera.getWorldDirection(new THREE.Vector3());
-
-    // item.cssObject.rotation.x = Math.atan(cameraVector.z / cameraVector.y) + Math.PI / 2;
-    // item.cssObject.rotation.y = Math.atan(cameraVector.x / cameraVector.z);
   });
 
   let collisions: Sphere3d[][] = [];
@@ -93,13 +83,13 @@ var render = function () {
   processCollisions(collisions);
   
   renderer.render(scene, camera);
-  cssRenderer.render(cssScene, camera);
+  // cssRenderer.render(cssScene, camera);
 };
 
 render();
 
 function getRandom() {
-  const value = Math.round(Math.random() * 200);
+  const value = Math.round(Math.random() * 500);
   return value % 2 === 0 ? value : -value;
 }
 
@@ -139,13 +129,13 @@ function processCollision(collision: Sphere3d[]): void {
     resultMass += item.mass;
 
     scene.remove(item.mesh);
-    cssScene.remove(item.cssObject);
+    // cssScene.remove(item.cssObject);
     let index = sceneItems.indexOf(item);
     sceneItems.splice(index, 1);
   });
 
   const newItem = new Sphere3d(resultMass, resultSpeed, resultPosition);
   scene.add(newItem.mesh);
-  cssScene.add(newItem.cssObject);
+  // cssScene.add(newItem.cssObject);
   sceneItems.push(newItem);
 }
