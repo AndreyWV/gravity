@@ -9,21 +9,18 @@ import { RectSystemValue } from './physical';
 drawCoordinateSystem(scene);
 
 const sceneItems: Sphere3d[] = [
-  // new Sphere3d(5, {X: 0, Y: 0, Z: 0}, {X: 50, Y: 0, Z: 0}),
+  new Sphere3d(5, {X: 0, Y: 0, Z: 0}, {X: 0, Y: 0, Z: 0}),
   // new Sphere3d(0.1, {X: 0.05, Y: 0, Z: 0}, {X: 0, Y: 0, Z: 0}),
 ]
 
-for (var i = 0; i < 20; i++) {
-  sceneItems.push(new Sphere3d(1, undefined, {X: getRandom(), Y: getRandom(), Z: getRandom()}))
-}
+// for (var i = 0; i < 20; i++) {
+//   sceneItems.push(new Sphere3d(1, undefined, {X: getRandom(), Y: getRandom(), Z: getRandom()}))
+// }
 
 sceneItems.forEach(item => {
   scene.add(item.mesh);
   cssScene.add(item.cssObject);
 });
-
-
-// cssScene.add(object);
 
 var render = function () {
   requestAnimationFrame(render);
@@ -59,6 +56,15 @@ var render = function () {
       item.cssObject.position.y + item.V.Y,
       item.cssObject.position.z + item.V.Z,
     )
+
+    window.camera = camera;
+    window.item = item;
+    window.THREE = THREE;
+
+    const cameraVector = camera.getWorldDirection(new THREE.Vector3());
+
+    // item.cssObject.rotation.x = Math.atan(cameraVector.z / cameraVector.y) + Math.PI / 2;
+    // item.cssObject.rotation.y = Math.atan(cameraVector.x / cameraVector.z);
   });
 
   let collisions: Sphere3d[][] = [];
